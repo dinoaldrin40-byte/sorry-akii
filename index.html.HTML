@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Akii</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff4d6d;
+            --secondary: #ffccd5;
+            --bg: #fff5f6;
+            --leather: #3d2622;
+        }
+
+        body {
+            margin: 0;
+            background: radial-gradient(circle, #fff0f3 0%, #ffccd5 100%);
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 25px;
+            box-shadow: 0 15px 45px rgba(255, 77, 109, 0.2);
+            width: 90%;
+            max-width: 420px;
+            text-align: center;
+            position: relative;
+            border: 2px solid #fff;
+        }
+
+        .hidden { display: none; }
+
+        h1, h2, h3 { font-family: 'Dancing Script', cursive; color: var(--primary); }
+
+        button {
+            background: var(--primary);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            margin: 10px;
+        }
+
+        button:hover { transform: scale(1.05); background: #c9184a; }
+        .btn-no { background: #94a3b8; color: white; position: absolute; z-index: 1000; }
+
+        .folder-btn { font-size: 60px; cursor: pointer; margin: 10px; display: inline-block; transition: 0.3s; }
+        .disabled { opacity: 0.3; pointer-events: none; filter: grayscale(1); }
+
+        /* Scrapbook Logic */
+        .book { position: relative; width: 320px; height: 460px; perspective: 2000px; margin: 0 auto; }
+        .page {
+            position: absolute;
+            width: 100%; height: 100%; top: 0; left: 0;
+            background: #fffcf2; border-radius: 5px 20px 20px 5px;
+            transform-origin: left; transition: transform 1.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+            cursor: pointer; padding: 20px; box-sizing: border-box;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            backface-visibility: hidden; box-shadow: -5px 5px 20px rgba(0,0,0,0.1);
+        }
+        .page.flipped { transform: rotateY(-165deg); z-index: 0 !important; }
+        .page img { width: 100%; border-radius: 8px; border: 6px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+
+        /* Final Back Cover */
+        .page-back { background: var(--leather) !important; color: #d7ccc8; border-right: 12px solid #2a1b19; }
+        .page-back img { border-radius: 50%; width: 160px; height: 160px; border: 4px solid rgba(255,255,255,0.1); filter: brightness(0.8); }
+
+        input { padding: 12px; width: 85%; border: 2px solid var(--secondary); border-radius: 12px; text-align: center; margin-bottom: 15px; font-size: 1rem; }
+    </style>
+</head>
+<body>
+
+    <div id="sec1" class="card">
+        <h1>Hi Akii! ❤️</h1>
+        <p>I have a question for you...</p>
+        <h2>Can you be my Valentine?</h2>
+        <button onclick="start()">Yes, I am!</button>
+        <button id="noBtn" class="btn-no" onmouseover="moveNo()">No</button>
+    </div>
+
+    <div id="sec2" class="card hidden">
+        <h2 id="typing"></h2>
+        <div id="pic1" class="hidden"><img src="intro1.png" style="width:100%; border-radius:15px;"></div>
+    </div>
+
+    <div id="sec3" class="card hidden">
+        <h3>When did we first meet?</h3>
+        <button onclick="wrong()">Dec 29, 2023</button>
+        <button onclick="wrong()">Sept 27, 2023</button>
+        <button onclick="correct1()">Dec 27, 2023</button>
+        <button onclick="wrong()">Dec 2022</button>
+        <p id="msg" style="color: var(--primary);"></p>
+    </div>
+
+    <div id="sec4" class="card hidden">
+        <img src="intro2.png" style="width:100%; border-radius:15px;">
+        <p>Correct! You remembered. ❤️</p>
+    </div>
+
+    <div id="sec5" class="card hidden">
+        <h3>Unlock 3 memories</h3>
+        <div id="f1" class="folder-btn" onclick="openF(1)">📂</div>
+        <div id="f2" class="folder-btn" onclick="openF(2)">📂</div>
+        <div id="f3" class="folder-btn" onclick="openF(3)">📂</div>
+    </div>
+
+    <div id="sec6" class="card hidden">
+        <img id="folderImg" src="" style="width:100%; border-radius:15px;">
+        <br><br><button onclick="back()">← Back</button>
+    </div>
+
+    <div id="sec7" class="card hidden">
+        <h3>One last check...</h3>
+        <p>To proceed, please enter my birthday:</p>
+        <input type="text" id="bdayInput" placeholder="Ex: Jan 01 2000">
+        <br><button onclick="checkBday()">Continue</button>
+    </div>
+
+    <div id="sec8" class="hidden">
+        <p style="text-align:center; color: var(--primary); font-weight:bold;">Tap to flip the pages ✨</p>
+        <div class="book">
+            <div class="page page-back" style="z-index: 1;">
+                <img src="scrap12.png">
+                <h2 style="color:white;">THE END</h2>
+                <p>Love you always, Akii.</p>
+                <small>2023 - Forever</small>
+            </div>
+            <div class="page" style="z-index: 2;" onclick="flip(this)"><h3>Page 11</h3><img src="scrap11.png"></div>
+            <div class="page" style="z-index: 3;" onclick="flip(this)"><h3>Page 10</h3><img src="scrap10.png"></div>
+            <div class="page" style="z-index: 4;" onclick="flip(this)"><h3>Page 9</h3><img src="scrap9.png"></div>
+            <div class="page" style="z-index: 5;" onclick="flip(this)"><h3>Page 8</h3><img src="scrap8.png"></div>
+            <div class="page" style="z-index: 6;" onclick="flip(this)"><h3>Page 7</h3><img src="scrap7.png"></div>
+            <div class="page" style="z-index: 7;" onclick="flip(this)"><h3>Page 6</h3><img src="scrap6.png"></div>
+            <div class="page" style="z-index: 8;" onclick="flip(this)"><h3>Page 5</h3><img src="scrap5.png"></div>
+            <div class="page" style="z-index: 9;" onclick="flip(this)"><h3>Page 4</h3><img src="scrap4.png"></div>
+            <div class="page" style="z-index: 10;" onclick="flip(this)"><h3>Page 3</h3><img src="scrap3.png"></div>
+            <div class="page" style="z-index: 11;" onclick="flip(this)"><h3>Page 2</h3><img src="scrap2.png"></div>
+            <div class="page" style="z-index: 12;" onclick="flip(this)">
+                <h2 style="font-size: 2.5rem;">Our Story</h2>
+                <img src="scrap1.png">
+                <p>Happy Valentine's Day!</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function moveNo() {
+            const btn = document.getElementById('noBtn');
+            btn.style.left = Math.random() * (window.innerWidth - 100) + 'px';
+            btn.style.top = Math.random() * (window.innerHeight - 50) + 'px';
+        }
+        function start() {
+            hide('sec1'); show('sec2');
+            let i = 0; const txt = "Happy Valentine's Akii...";
+            function type() {
+                if (i < txt.length) {
+                    document.getElementById('typing').innerHTML += txt.charAt(i);
+                    i++; setTimeout(type, 150);
+                } else {
+                    setTimeout(() => { show('pic1'); setTimeout(() => { hide('sec2'); show('sec3'); }, 3000); }, 1000);
+                }
+            }
+            type();
+        }
+        function wrong() { document.getElementById('msg').innerText = "Wrong date! Try again baby ❤️"; }
+        function correct1() { hide('sec3'); show('sec4'); setTimeout(() => { hide('sec4'); show('sec5'); }, 3000); }
+        let count = 0;
+        function openF(n) {
+            const imgs = ["intro3.jpg", "intro4.png", "intro5.png"];
+            document.getElementById('folderImg').src = imgs[n-1];
+            document.getElementById('f'+n).classList.add('disabled');
+            hide('sec5'); show('sec6'); count++;
+        }
+        function back() { if(count >= 3) { hide('sec6'); show('sec7'); } else { hide('sec6'); show('sec5'); } }
+        
+        // Final logic update: Manual input check for Oct 16 2004
+        function checkBday() { 
+            const val = document.getElementById('bdayInput').value.toLowerCase();
+            if(val.includes("oct 16 2004") || val.includes("october 16 2004")) { 
+                hide('sec7'); show('sec8'); 
+            } else {
+                alert("Incorrect! Please try again."); 
+            }
+        }
+
+        function flip(p) { p.classList.add('flipped'); setTimeout(() => { p.style.zIndex = "0"; }, 600); }
+        function hide(id) { document.getElementById(id).classList.add('hidden'); }
+        function show(id) { document.getElementById(id).classList.remove('hidden'); }
+    </script>
+</body>
+</html>
